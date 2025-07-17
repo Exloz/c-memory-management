@@ -129,7 +129,11 @@ snek_object_t *snek_add(snek_object_t *a, snek_object_t *b){
       return new_object;
     case VECTOR3:
       if(b->kind != VECTOR3) return NULL;
-      return new_snek_vector3(snek_add(a, b), snek_add(a, b), snek_add(a, b));
+      return new_snek_vector3(
+        snek_add(a->data.v_vector3.x, b->data.v_vector3.x),
+        snek_add(a->data.v_vector3.y, b->data.v_vector3.y),
+        snek_add(a->data.v_vector3.z, b->data.v_vector3.z)
+      );
     case ARRAY:
       if(b->kind != ARRAY) return NULL;
       snek_object_t *new_array = new_snek_array(a->data.v_array.size + b->data.v_array.size);
@@ -137,8 +141,8 @@ snek_object_t *snek_add(snek_object_t *a, snek_object_t *b){
       for (int i = 0; i < snek_length(a); i++) {
         snek_array_set(new_array, i, snek_array_get(a, i));
       }
-      for (int i = 0, j = snek_length(a) - 1; i < snek_length(b); i++, j++) {
-        snek_array_set(new_array, j, snek_array_get(a, i));
+      for (int i = 0, j = snek_length(a); i < snek_length(b); i++, j++) {
+        snek_array_set(new_array, j, snek_array_get(b, i));
       }
       return new_array;
     default:
